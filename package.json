@@ -8,7 +8,7 @@
     "vite-plugin-wasm-pack": "^0.1.5"
   },
   "scripts": {
-    "wasm": "wasm-pack build ./wasm_game_of_life --target web",
+    "wasm": "./node_modules/.bin/wasm-pack build ./wasm_game_of_life --target web",
     "dev": "yarn wasm && vite",
     "build": "yarn wasm && vite build"
   },

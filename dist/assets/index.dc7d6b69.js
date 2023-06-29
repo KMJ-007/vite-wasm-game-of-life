@@ -1,3 +1,45 @@
+const p = function polyfill() {
+  const relList = document.createElement("link").relList;
+  if (relList && relList.supports && relList.supports("modulepreload")) {
+    return;
+  }
+  for (const link of document.querySelectorAll('link[rel="modulepreload"]')) {
+    processPreload(link);
+  }
+  new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type !== "childList") {
+        continue;
+      }
+      for (const node of mutation.addedNodes) {
+        if (node.tagName === "LINK" && node.rel === "modulepreload")
+          processPreload(node);
+      }
+    }
+  }).observe(document, { childList: true, subtree: true });
+  function getFetchOpts(script) {
+    const fetchOpts = {};
+    if (script.integrity)
+      fetchOpts.integrity = script.integrity;
+    if (script.referrerpolicy)
+      fetchOpts.referrerPolicy = script.referrerpolicy;
+    if (script.crossorigin === "use-credentials")
+      fetchOpts.credentials = "include";
+    else if (script.crossorigin === "anonymous")
+      fetchOpts.credentials = "omit";
+    else
+      fetchOpts.credentials = "same-origin";
+    return fetchOpts;
+  }
+  function processPreload(link) {
+    if (link.ep)
+      return;
+    link.ep = true;
+    const fetchOpts = getFetchOpts(link);
+    fetch(link.href, fetchOpts);
+  }
+};
+p();
 let wasm;
 const heap = new Array(32).fill(void 0);
 heap.push(void 0, null, true, false);
@@ -269,7 +311,9 @@ init().then((raw) => {
   const width = universe.width();
   const height = universe.height();
   console.log("init wasm-pack", raw.memory);
-  const canvas = document.getElementById("game-of-life-canvas");
+  const canvas = document.getElementById(
+    "game-of-life-canvas"
+  );
   canvas.height = (CELL_SIZE + 1) * height + 1;
   canvas.width = (CELL_SIZE + 1) * width + 1;
   const ctx = canvas.getContext("2d");
@@ -310,7 +354,12 @@ init().then((raw) => {
       for (let col = 0; col < width; col++) {
         const idx = getIndex(row, col);
         ctx.fillStyle = cells[idx] === Cell.Dead ? DEAD_COLOR : ALIVE_COLOR;
-        ctx.fillRect(col * (CELL_SIZE + 1) + 1, row * (CELL_SIZE + 1) + 1, CELL_SIZE, CELL_SIZE);
+        ctx.fillRect(
+          col * (CELL_SIZE + 1) + 1,
+          row * (CELL_SIZE + 1) + 1,
+          CELL_SIZE,
+          CELL_SIZE
+        );
       }
     }
     ctx.stroke();

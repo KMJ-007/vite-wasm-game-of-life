@@ -11,5 +11,8 @@
     "wasm": "wasm-pack build ./wasm_game_of_life --target web",
     "dev": "yarn wasm && vite",
     "build": "yarn wasm && vite build"
+  },
+  "dependencies": {
+    "wasm-pack": "^0.12.1"
   }
 }

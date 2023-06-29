@@ -1,0 +1,6 @@
+{
+  "builds": [
+    { "src": "wasm_game_of_life/**/*.rs", "use": "@vercel/rust", "config": { "CMD": ["wasm-pack", "build"] } },
+    { "src": "src/**/*.js", "use": "@vercel/static" }
+  ]
+}

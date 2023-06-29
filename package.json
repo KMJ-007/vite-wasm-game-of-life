@@ -10,7 +10,10 @@
   "scripts": {
     "wasm": "./node_modules/.bin/wasm-pack build ./wasm_game_of_life --target web",
     "dev": "yarn wasm && vite",
-    "build": "yarn wasm && vite build"
+    "install-rustup": "echo 'Installing Rustup...'; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; source \"$HOME/.cargo/env\"",
+    "install-wasm-pack": "echo 'Installing wasm-pack...'; curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh -s -- -y",
+    "build-wasm-parser": "echo 'Building wasm-parser...';",
+    "build": "yarn run install-rustup && yarn run install-wasm-pack &&  yarn wasm && vite build"
   },
   "dependencies": {
     "wasm-pack": "^0.12.1"

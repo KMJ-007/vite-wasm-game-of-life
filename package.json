@@ -10,7 +10,7 @@
   "scripts": {
     "wasm": "./node_modules/.bin/wasm-pack build ./wasm_game_of_life --target web",
     "dev": "yarn wasm && vite",
-    "install-rustup": "echo 'Installing Rustup...'; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; source \"$HOME/.cargo/env\"",
+    "install-rustup": "echo 'Installing Rustup...'; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path --default-host x86_64-unknown-linux-gnu --default-toolchain stable; export PATH=\"$HOME/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin:$PATH\"",
     "install-wasm-pack": "echo 'Installing wasm-pack...'; curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh -s -- -y",
     "build-wasm-parser": "echo 'Building wasm-parser...';",
     "build": "yarn run install-rustup && yarn run install-wasm-pack &&  yarn wasm && vite build"
